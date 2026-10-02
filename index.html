@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="it" class="h-full bg-black">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        /* ===================================================================
+           1. CONFIGURAZIONE RAPIDA - INSERISCI QUI I TUOI DATI:
+           =================================================================== */
+        
+        const VALORE_INIZIALE = 10;            // Inserisci: 10, 25, 50 oppure 100
+        const VALORE_RESIDUO = 10;           // Inserisci il saldo rimasto (es. 75.50)
+        const CODICE_12_CARATTERI = "ELSDNBNPEDKL"; // Inserisci i 12 caratteri (il "C-" viene aggiunto da solo!)
+        
+        /* =================================================================== */
+    </script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gift Card Carlo.Mes</title>
+    
+    <!-- Tailwind CSS per classi utility -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #08070c;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        /* SFONDO ANIMATO PASTELLO FLUIDO ED ELEGANTE */
+        .mesh-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 30%, #151022 0%, #07060a 80%);
+        }
+
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.38;
+            animation: orbFloat 22s ease-in-out infinite alternate;
+        }
+
+        /* Tonalità pastello morbide (Viola Lillà, Oro Champagne, Azzurro Polvere) */
+        .orb-1 {
+            top: -5%;
+            left: 10%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(192, 132, 252, 0.45) 0%, rgba(0,0,0,0) 70%);
+            animation-duration: 18s;
+        }
+
+        .orb-2 {
+            bottom: 5%;
+            right: -10%;
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(253, 230, 138, 0.35) 0%, rgba(0,0,0,0) 70%);
+            animation-duration: 24s;
+        }
+
+        .orb-3 {
+            top: 45%;
+            left: -15%;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.35) 0%, rgba(0,0,0,0) 70%);
+            animation-duration: 20s;
+        }
+
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(35px, -25px) scale(1.08); }
+            100% { transform: translate(-25px, 35px) scale(0.92); }
+        }
+
+        /* GLASSMORPHISM APPLE/TESLA STYLE */
+        .glass-panel {
+            background: rgba(22, 20, 30, 0.65);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.7),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .glass-card-gold {
+            background: linear-gradient(135deg, rgba(35, 30, 52, 0.82) 0%, rgba(18, 15, 28, 0.92) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(234, 179, 8, 0.38);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8),
+                        0 0 30px rgba(234, 179, 8, 0.12),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+        }
+
+        /* EFFETTO RIFLESSO SULLA GIFT CARD */
+        .card-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-shimmer::after {
+            content: '';
+            position: absolute;
+            top: -150%;
+            left: -150%;
+            width: 400%;
+            height: 400%;
+            background: linear-gradient(
+                45deg,
+                transparent 45%,
+                rgba(255, 255, 255, 0.08) 50%,
+                transparent 55%
+            );
+            transform: rotate(25deg);
+            animation: shimmerSlide 8s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes shimmerSlide {
+            0% { transform: translateY(-100%) rotate(25deg); }
+            30% { transform: translateY(100%) rotate(25deg); }
+            100% { transform: translateY(100%) rotate(25deg); }
+        }
+
+        /* TRANSIZIONI DI PAGINA FLUIDE */
+        .page-transition {
+            transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .page-hidden-left {
+            opacity: 0;
+            transform: translateX(-35px) scale(0.96);
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+        }
+
+        .page-hidden-right {
+            opacity: 0;
+            transform: translateX(35px) scale(0.96);
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+        }
+
+        .page-active {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            position: relative;
+            width: 100%;
+        }
+
+        /* BOTTONE APPLE STYLE PREMIUM */
+        .btn-apple {
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            color: #000000;
+            box-shadow: 0 10px 30px -5px rgba(255, 255, 255, 0.25),
+                        0 0 15px rgba(255, 255, 255, 0.15);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-apple:active {
+            transform: scale(0.97);
+            box-shadow: 0 5px 15px -3px rgba(255, 255, 255, 0.3);
+        }
+
+        /* SIM CHIP VIRTUAL */
+        .sim-chip {
+            background: linear-gradient(135deg, #f1f5f9 0%, #94a3b8 50%, #64748b 100%);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 sm:p-6 relative select-none">
+
+    <!-- SFONDO DINAMICO CON SFUMATURE PASTELLO -->
+    <div class="mesh-bg">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <!-- CONTENITORE MOBILE FIRST -->
+    <main class="w-full max-w-md my-auto z-10 relative">
+
+        <!-- ============================================================== -->
+        <!-- PAGINA 1: WELCOME & ANTEPRIMA CARTA                            -->
+        <!-- ============================================================== -->
+        <section id="page-1" class="page-transition page-active space-y-7">
+            
+            <!-- BRAND HEADER -->
+            <div class="flex flex-col items-center text-center space-y-3">
+                <div class="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-amber-300 animate-pulse"></span>
+                    <span class="text-[12px] font-bold tracking-widest uppercase text-slate-200">CARLO.MES</span>
+                </div>
+
+                <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
+                    Gentile Cliente,<br>
+                    <span class="bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-400 bg-clip-text text-transparent">
+                        ecco la tua Gift Card.
+                    </span>
+                </h1>
+            </div>
+
+            <!-- VIRTUAL CARD CARLO.MES -->
+            <div class="glass-card-gold card-shimmer rounded-3xl p-6 sm:p-7 relative overflow-hidden transition-all duration-500 hover:scale-[1.01]">
+                
+                <div class="absolute -right-8 -bottom-8 text-white/[0.03] pointer-events-none">
+                    <i data-lucide="shield-check" class="w-56 h-56"></i>
+                </div>
+
+                <!-- Header Card -->
+                <div class="flex justify-between items-start mb-10">
+                    <div class="space-y-1">
+                        <p class="text-[10px] font-extrabold tracking-widest text-amber-300/80 uppercase">Azienda Emittente</p>
+                        <h2 class="text-2xl font-black tracking-wider text-white">Carlo.Mes</h2>
+                    </div>
+
+                    <!-- Smart Chip Metallico -->
+                    <div class="w-12 h-9 rounded-lg sim-chip relative overflow-hidden shadow-md flex items-center justify-center">
+                        <div class="w-full h-px bg-slate-900/40 absolute top-3"></div>
+                        <div class="w-full h-px bg-slate-900/40 absolute bottom-3"></div>
+                        <div class="h-full w-px bg-slate-900/40 absolute left-4"></div>
+                    </div>
+                </div>
+
+                <!-- Valore e Dettagli -->
+                <div class="space-y-1 mb-8">
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Valore Nominale</p>
+                    <div class="text-4xl sm:text-5xl font-black tracking-tight text-white flex items-baseline gap-1">
+                        <span>€</span>
+                        <span id="p1-card-value">100</span>
+                    </div>
+                </div>
+
+                <!-- Footer Card -->
+                <div class="flex justify-between items-end pt-4 border-t border-white/10">
+                    <div>
+                        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Stato Carta</p>
+                        <p class="text-xs font-semibold text-emerald-400 flex items-center gap-1.5 mt-0.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                            Attiva e Riservata
+                        </p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Servizio</p>
+                        <p class="text-xs font-semibold text-amber-300">Carlo.Mes Premium</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INFO BOX ELEGANTE -->
+            <div class="glass-panel rounded-2xl p-4 text-center border border-white/10">
+                <p class="text-xs sm:text-sm text-slate-300 font-normal leading-relaxed">
+                    Visualizza il saldo residuo e il codice riservato della tua Gift Card nella pagina successiva.
+                </p>
+            </div>
+
+            <!-- PULSANTE CALL TO ACTION -->
+            <button onclick="goToPage(2)" class="btn-apple w-full py-4 px-6 rounded-2xl font-bold text-base flex items-center justify-center gap-3 transition-all">
+                <span>Visualizza i dati della mia gift card</span>
+                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+            </button>
+        </section>
+
+
+        <!-- ============================================================== -->
+        <!-- PAGINA 2: DETTAGLI E CODICE SEGRETO                            -->
+        <!-- ============================================================== -->
+        <section id="page-2" class="page-transition page-hidden-right space-y-6">
+            
+            <!-- CONTROLLO TOP -->
+            <div class="flex items-center justify-between">
+                <button onclick="goToPage(1)" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white flex items-center gap-2 text-xs font-semibold backdrop-blur-md transition-all active:scale-95">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span>Indietro</span>
+                </button>
+
+                <div class="text-right">
+                    <span class="text-xs font-bold tracking-widest text-amber-300 uppercase">CARLO.MES</span>
+                </div>
+            </div>
+
+            <!-- PANNELLO DETTAGLIO CREDITO E CODICE -->
+            <div class="glass-panel rounded-3xl p-6 sm:p-7 space-y-6 relative border border-white/15">
+                
+                <!-- Title Header -->
+                <div class="flex items-center justify-between pb-4 border-b border-white/10">
+                    <div class="flex items-center gap-3">
+                        <div class="p-3 rounded-2xl bg-amber-400/10 border border-amber-400/20 text-amber-300">
+                            <i data-lucide="wallet" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-white">Riepilogo Buono</h3>
+                            <p class="text-xs text-slate-400">Rilasciato da <span class="text-slate-200 font-semibold">Carlo.Mes</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GRIGLIA VALORE ORIGINARIO & SALDO RESIDUO -->
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- Valore Originario -->
+                    <div class="bg-white/[0.03] rounded-2xl p-4 border border-white/10 flex flex-col justify-between">
+                        <span class="text-xs font-medium text-slate-400">Valore Originario</span>
+                        <div class="mt-2 text-xl sm:text-2xl font-extrabold text-slate-200">
+                            € <span id="p2-original-val">0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Saldo Residuo -->
+                    <div class="bg-amber-400/10 rounded-2xl p-4 border border-amber-400/30 flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-amber-300">Saldo Residuo</span>
+                        <div class="mt-2 text-2xl sm:text-3xl font-black text-amber-400">
+                            € <span id="p2-remaining-val">0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEZIONE CODICE SEGRETO C-XXXXXXXXXXXX -->
+                <div class="space-y-2 pt-2">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-semibold uppercase tracking-wider text-slate-300">
+                            Codice Riservato
+                        </label>
+                        <button onclick="toggleCodeVisibility()" class="text-xs text-amber-300 hover:text-amber-200 font-semibold flex items-center gap-1">
+                            <i id="eye-icon" data-lucide="eye" class="w-3.5 h-3.5"></i>
+                            <span id="eye-text">Mostra</span>
+                        </button>
+                    </div>
+
+                    <div class="relative flex items-center">
+                        <div class="w-full bg-black/60 border border-amber-400/40 rounded-2xl py-4 px-4 font-mono text-base sm:text-lg font-bold text-center tracking-widest text-amber-300 shadow-inner select-all">
+                            <span id="p2-code-display">C-************</span>
+                        </div>
+                    </div>
+
+                    <!-- PULSANTE COPIA CODICE -->
+                    <button onclick="copyGiftCode()" class="w-full mt-2 py-3.5 bg-amber-400 hover:bg-amber-300 active:scale-[0.98] text-black font-extrabold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg shadow-amber-400/20">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                        <span>Copia Codice Segreto</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TESTO INFORMATIVO PROFESSIONALE -->
+            <div class="glass-panel rounded-2xl p-5 text-xs sm:text-sm text-slate-300 space-y-3 leading-relaxed border border-white/10">
+                <p class="font-bold text-amber-200 text-sm">
+                    Gentile Cliente,
+                </p>
+                <p id="p2-dynamic-text">
+                    <!-- Popolato da JS -->
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- TOAST NOTIFICA COPIA CODICE -->
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 border border-amber-400/50 text-amber-300 px-5 py-3 rounded-2xl text-xs font-bold flex items-center gap-2.5 shadow-2xl backdrop-blur-xl transition-all duration-300 opacity-0 translate-y-8 pointer-events-none z-50">
+        <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-400"></i>
+        <span>Codice copiato negli appunti!</span>
+    </div>
+
+    <script>
+        let isCodeVisible = false;
+        let FULL_SECRET_CODE = "";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Inizializza Icone Lucide
+            lucide.createIcons();
+
+            // Calcola il codice completo con il prefisso C- in automatico
+            FULL_SECRET_CODE = "C-" + (CODICE_12_CARATTERI || "XXXXXXXXXXXX");
+
+            // Popola Dati Dinamici
+            initApp();
+        });
+
+        function initApp() {
+            // Popolamento Pagina 1
+            document.getElementById('p1-card-value').innerText = parseFloat(VALORE_INIZIALE).toFixed(0);
+
+            // Popolamento Pagina 2
+            document.getElementById('p2-original-val').innerText = parseFloat(VALORE_INIZIALE).toFixed(2);
+            document.getElementById('p2-remaining-val').innerText = parseFloat(VALORE_RESIDUO).toFixed(2);
+
+            // Testo personalizzato esplicativo
+            const textContent = `Hai acquistato / ricevuto una Gift Card dell'azienda <strong>Carlo.Mes</strong> dal valore originario di <strong>€${parseFloat(VALORE_INIZIALE).toFixed(2)}</strong>. Il saldo residuo disponibile è di <strong>€${parseFloat(VALORE_RESIDUO).toFixed(2)}</strong>. Utilizza il tuo codice personale <strong>${FULL_SECRET_CODE}</strong> per riscattare i prodotti e i servizi disponibili.`;
+            document.getElementById('p2-dynamic-text').innerHTML = textContent;
+
+            // Inizializza stato codice oscurato
+            updateCodeDisplay();
+        }
+
+        // Cambio Schermata
+        function goToPage(pageNumber) {
+            const page1 = document.getElementById('page-1');
+            const page2 = document.getElementById('page-2');
+
+            if (pageNumber === 2) {
+                page1.classList.remove('page-active');
+                page1.classList.add('page-hidden-left');
+
+                page2.classList.remove('page-hidden-right');
+                page2.classList.add('page-active');
+            } else {
+                page2.classList.remove('page-active');
+                page2.classList.add('page-hidden-right');
+
+                page1.classList.remove('page-hidden-left');
+                page1.classList.add('page-active');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Alterna Mostra/Nascondi Codice Segreto
+        function toggleCodeVisibility() {
+            isCodeVisible = !isCodeVisible;
+            updateCodeDisplay();
+
+            const eyeText = document.getElementById('eye-text');
+            const eyeIcon = document.getElementById('eye-icon');
+
+            if (isCodeVisible) {
+                eyeText.innerText = "Nascondi";
+                eyeIcon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                eyeText.innerText = "Mostra";
+                eyeIcon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        function updateCodeDisplay() {
+            const codeDisplay = document.getElementById('p2-code-display');
+            if (isCodeVisible) {
+                codeDisplay.innerText = FULL_SECRET_CODE;
+            } else {
+                codeDisplay.innerText = "C-• • • • • • • • • • • •";
+            }
+        }
+
+        // Copia il codice segreto con fallback
+        function copyGiftCode() {
+            const tempInput = document.createElement("input");
+            tempInput.value = FULL_SECRET_CODE;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999);
+            
+            try {
+                document.execCommand('copy');
+                showToast();
+            } catch (err) {
+                console.error("Impossibile copiare il codice", err);
+            }
+            
+            document.body.removeChild(tempInput);
+        }
+
+        // Mostra Toast Notifica
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('opacity-0', 'translate-y-8', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-8', 'pointer-events-none');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
